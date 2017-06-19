@@ -26,4 +26,12 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function scopeAdmin($query){
+        return $query->where('access_level', 1);
+    }
+
+    public function scopeClient($query){
+        return $query->where('access_level', 0);
+    }
 }
