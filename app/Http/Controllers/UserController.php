@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 
 class UserController extends Controller
@@ -57,6 +59,10 @@ class UserController extends Controller
             $clients = User::client()->get();
             return Redirect::to('users')->with('clients', $clients);
         }
+        else{
+
+            return Redirect::back()->withErrors($validator)->withInput();
+        }
     }
 
     /**
@@ -90,13 +96,20 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        ($request->input('name'))? $user->name = $request->input('name'):'';
-        ($request->input('email'))? $user->email = $request->input('email'):'';
-        ($request->input('password'))?$user->password = Hash::make($request->input('password')):'';
-        $user->save();
+        $client = User::findOrFail($user->id);
+        $client->update([
+            'name' => ($request->input('name'))? $client->name = $request->input('name'):$client->name,
+            'email' => ($request->input('email'))? $client->email = $request->input('email'):$client->email,
+            'password' => ($request->input('password'))?$client->password = bcrypt($request->input('password')):$client->password,
+        ]);
 
         $clients = User::client()->get();
         return Redirect::to('users')->with('clients', $clients);
+    }
+
+    public function delete(User $user){
+
+        return View::make('users.delete')->with('client', $user);
     }
 
     /**
@@ -111,5 +124,10 @@ class UserController extends Controller
 
         $clients = User::client()->get();
         return Redirect::to('users')->with('clients', $clients);
+    }
+
+    public function error(){
+
+        return View::make('error');
     }
 }
