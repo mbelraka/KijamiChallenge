@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
-use Illuminate\View\ViewName;
+use Illuminate\Support\Facades\View;
 
 class UserController extends Controller
 {
@@ -27,7 +26,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return View::make('users.create');
+        return View::make('users.add');
     }
 
     /**
@@ -68,7 +67,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return View::make('users.show')->with('client', $user);
+        return View::make('users.get')->with('client', $user);
     }
 
     /**
