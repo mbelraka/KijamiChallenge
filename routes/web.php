@@ -20,5 +20,6 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'UserController@index');
-
+Route::get('/error', 'UserController@error');
+Route::get('users/{user}/delete', 'UserController@delete')->middleware('admin');
 Route::resource('users', 'UserController');
